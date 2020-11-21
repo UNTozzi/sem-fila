@@ -22,10 +22,10 @@ interface FuncionarioDTO {
 }
 
 function Appointment () {
-    const [funcionario, setFuncionario]: FuncionarioDTO = useState({});
-    const [cliente, setCliente]: ClienteDTO = useState({});
-    const [funcionarios, setFuncionarios]: FuncionarioDTO = useState([]);
-    const [clientes, setClientes]: ClienteDTO = useState([]);
+    const [funcionario, setFuncionario] = useState({});
+    const [cliente, setCliente] = useState({});
+    const [funcionarios, setFuncionarios] = useState([]);
+    const [clientes, setClientes] = useState([]);
     const [dataAgendamento, setDataAgendamento] = useState('');
     const [horario, setHorario] = useState('');
     const [status, setStatus] = useState('');
@@ -96,8 +96,6 @@ function Appointment () {
                         <Select
                             options={listaFuncionarios()}
                             value={funcionario}
-                            valueKey={funcionario.key}
-                            valueLabel={funcionario.nome}
                             onChange={({ option }) => {setFuncionario(option); console.log(option)}}
                         />
                     </FormField>
@@ -105,8 +103,6 @@ function Appointment () {
                         <Select
                             options={listaClientes()}
                             value={cliente}
-                            valueKey={cliente.key}
-                            valueLabel={cliente.nome}
                             onChange={({ option }) => setCliente(option)}
                         />
                     </FormField>
