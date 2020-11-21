@@ -35,7 +35,7 @@ function Register() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
         
-            <main className="main">
+            <main className="main" style={{maxHeight: '90vh'}}>
                 <h1 className="title">SEM<a>FILA</a></h1>
                 <div className="grid">
                     <Form
