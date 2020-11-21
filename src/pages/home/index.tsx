@@ -1,8 +1,10 @@
-import { Box, Button, DataTable, Form,  FormField, MaskedInput, Select, Text } from 'grommet'
+import { Box, Button, DataTable, Header, Menu } from 'grommet'
 import Head from 'next/head'
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import firebase from '../../../lib/firebase'
+
+import { Home, Logout } from 'grommet-icons'
 
 interface AppointmentDTO {
     cliente: ClienteDTO,
@@ -35,6 +37,10 @@ function Appointment () {
     const handleGoToAppointment = useCallback(() => {
         window.location.href = '../appointment'
     }, [])
+
+    const handleLogout = useCallback(() => {
+        window.location.href = '../'
+    }, [])
     
     useEffect(() => {
         let reference = firebase.ref('appointment/')
@@ -54,71 +60,53 @@ function Appointment () {
                 <title>SemFila</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-        
-            <main className="main" style={{maxHeight: '90vh'}}>
+            <Header background="brand" width="100%" margin="none">
+                <Button icon={<Home />} hoverIndicator />
+                <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
+            </Header>
+            <Box className="main" pad="0" height="90vh" width="90vw" justify="start" margin={{top: '3vh'}}>
+                <Button alignSelf="end" style={{color: "white"}} onClick={handleGoToAppointment} label="Agendar novo horário"/>
                 <Box className="grid" direction="column">
                     <DataTable
-                        margin={{bottom:'3vh'}}
+                        style={{width: '70vw'}}
+                        primaryKey={false}
+                        onClickRow={(data) => console.log(data.datum)}
+                        border={{
+                            header: {
+                                side: "bottom",
+                                color: "#7D4CDB"
+                            },
+                        }}
                         columns={[
                             {
                                 property: 'funcionario',
                                 header: 'Funcionário',
-                                primary: true,
                             },
                             {
                                 property: 'cliente',
                                 header: 'Cliente',
-                                primary: true,
+                                align: 'center'
                             },
                             {
                                 property: 'dataAgendamento',
                                 header: 'Data de Agendamento',
-                                primary: true,
+                                align: 'center'
                             },
                             {
                                 property: 'horario',
                                 header: 'Horário',
-                                primary: true,
+                                align: 'end'
                             },
                             {
                                 property: 'status',
                                 header: 'Status',
-                                primary: true,
+                                align: 'end'
                             }
                         ]}
                         data={appointments}
                     />
-                    {/* <ul style={{listStyle: 'none', width: '80vw'}} className="card list-style-none">
-                        {appointments.map((appointment: AppointmentDTO, index) => {
-                            return(
-                                <>
-                                    <li key={index} className="text-decoration-none">
-                                        <Box direction="column">
-                                            <Text>
-                                                Cliente: {appointment.cliente}
-                                            </Text>
-                                            <Text>
-                                                Funcionário: {appointment.funcionario}
-                                            </Text>
-                                            <Text>
-                                                Data Marcada: {appointment.dataAgendamento}
-                                            </Text>
-                                            <Text>
-                                                Horario: {appointment.horario}
-                                            </Text>
-                                            <Text>
-                                                Status: {appointment.status}
-                                            </Text>
-                                        </Box>
-                                    </li>
-                                    <br/>
-                                </>
-                            )
-                        })}
-                    </ul> */}
-                    <Button style={{color: "white"}} onClick={handleGoToAppointment} label="Agendar novo horário"/>
                 </Box>
-            </main>
+            </Box>
             <footer className="footer">
                 <a rel="noopener noreferrer">Powered by Fawkes</a>
             </footer>

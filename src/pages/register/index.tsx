@@ -1,18 +1,9 @@
-import { Box, Button, Form, FormExtendedEvent, FormField, TextInput } from 'grommet'
+import { Box, Button, Form, FormField, Header, TextInput } from 'grommet'
+import { FormPreviousLink } from 'grommet-icons';
 import Head from 'next/head'
-import { FormEvent, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import firebase from '../../../lib/firebase'
-
-
-interface RegisterDTO {
-    email: String,
-    nome: String,
-    senha: String,
-    nomeBarbearia: String,
-    funcionario?: Boolean,
-    key?: String;
-}
 
 function Register() {
 
@@ -28,21 +19,27 @@ function Register() {
         })
     }
 
+    const handleGoToIndex = useCallback(() => {
+        window.location.href = '../'
+    }, [])
+
     return (
         <div className="container">
             <Head>
                 <title>SemFila</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-        
-            <main className="main" style={{maxHeight: '90vh'}}>
+            <Header background="brand" width="100%" margin="none">
+                <Button icon={<FormPreviousLink />} hoverIndicator onClick={handleGoToIndex}/>
+            </Header>
+            <Box className="main" height="90vh" pad="0">
                 <h1 className="title">SEM<a>FILA</a></h1>
-                <div className="grid">
+                <Box className="grid" width="70vw" margin="0">
                     <Form
                         onReset={() => (setSenha(''), setEmail(''), setNome(''), setNomeBarbearia(''))}
                         onSubmit={handleSubmit}
                         className="card"
-                        style={{width: "70vw"}}
+                        style={{width: '40vw'}}
                     >
                         <FormField label="Nome">
                             <TextInput required type="text" value={nome} onChange={val => setNome(val.target.value)}/>
@@ -57,12 +54,12 @@ function Register() {
                             <TextInput required type="password" value={senha} onChange={val => setSenha(val.target.value)}/>
                         </FormField>
                         <Box direction="row" justify="evenly">
-                            <Button type="submit" primary label="Registrar" color="#0070f3"/>
-                            <Button type="reset" label="Limpar" style={{borderColor: "#0070f3"}}/>
+                            <Button type="submit" primary label="Registrar"/>
+                            <Button type="reset" label="Limpar"/>
                         </Box>
                     </Form>
-                </div>
-            </main>
+                </Box>
+            </Box>
         
             <footer className="footer">
                 <a rel="noopener noreferrer">Powered by Fawkes</a>

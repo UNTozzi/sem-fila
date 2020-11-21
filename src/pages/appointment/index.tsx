@@ -1,4 +1,5 @@
-import { Box, Button, DateInput, Form,  FormField, MaskedInput, Select, TextInput } from 'grommet'
+import { Box, Button, Form,  FormField, Header, MaskedInput, Menu, Select, TextInput } from 'grommet'
+import { FormPreviousLink, Logout } from 'grommet-icons';
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
 
@@ -68,52 +69,65 @@ function Appointment () {
         })
     }
 
+    const handleGoToHome = useCallback(() => {
+        window.location.href = '../home'
+    }, [])
+
+    const handleLogout = useCallback(() => {
+        window.location.href = '../'
+    }, [])
+
     return (
         <div className="container">
             <Head>
                 <title>SemFila</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Form
-                onSubmit={handleSchedule}
-                className="card"
-                style={{maxHeight: '80vh', maxWidth: '80vw', width: '80vw', margin: 0}}
-            >
-                <FormField label="Funcionário">
-                    <Select
-                        options={listaFuncionarios()}
-                        value={funcionario}
-                        valueKey={funcionario.key}
-                        valueLabel={funcionario.nome}
-                        onChange={({ option }) => {setFuncionario(option); console.log(option)}}
-                    />
-                </FormField>
-                <FormField label="Cliente">
-                    <Select
-                        options={listaClientes()}
-                        value={cliente}
-                        valueKey={cliente.key}
-                        valueLabel={cliente.nome}
-                        onChange={({ option }) => setCliente(option)}
-                    />
-                </FormField>
-                <FormField label="Data do agendamento">
-                    <TextInput type="date" value={dataAgendamento} onChange={value => setDataAgendamento(value.target.value)}/>
-                </FormField>
-                <FormField label="Horário">
-                    <TextInput type="time" value={horario} onChange={value => setHorario(value.target.value)}/>
-                </FormField>
-                <FormField label="Status">
-                    <Select
-                        options={['Livre', 'Marcado', 'Cancelado']}
-                        value={status}
-                        onChange={({ option }) => setStatus(option)}
-                    />
-                </FormField>
-                <Box direction="row" justify="evenly">
-                    <Button type="submit" primary label="Agendar" color="#0070f3"/>
-                </Box>
-            </Form>
+            <Header background="brand" width="100%" margin="none">
+                <Button icon={<FormPreviousLink/>} hoverIndicator onClick={handleGoToHome}/>
+                <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
+            </Header>
+            <Box className="main" pad="0">
+                <Form
+                    onSubmit={handleSchedule}
+                    style={{maxHeight: '80vh', maxWidth: '80vw', width: '80vw', margin: 0}}
+                >
+                    <FormField label="Funcionário">
+                        <Select
+                            options={listaFuncionarios()}
+                            value={funcionario}
+                            valueKey={funcionario.key}
+                            valueLabel={funcionario.nome}
+                            onChange={({ option }) => {setFuncionario(option); console.log(option)}}
+                        />
+                    </FormField>
+                    <FormField label="Cliente">
+                        <Select
+                            options={listaClientes()}
+                            value={cliente}
+                            valueKey={cliente.key}
+                            valueLabel={cliente.nome}
+                            onChange={({ option }) => setCliente(option)}
+                        />
+                    </FormField>
+                    <FormField label="Data do agendamento">
+                        <TextInput type="date" value={dataAgendamento} onChange={value => setDataAgendamento(value.target.value)}/>
+                    </FormField>
+                    <FormField label="Horário">
+                        <TextInput type="time" value={horario} onChange={value => setHorario(value.target.value)}/>
+                    </FormField>
+                    <FormField label="Status">
+                        <Select
+                            options={['Livre', 'Marcado', 'Cancelado']}
+                            value={status}
+                            onChange={({ option }) => setStatus(option)}
+                        />
+                    </FormField>
+                    <Box direction="row" justify="evenly">
+                        <Button type="submit" primary label="Agendar" margin={{top: '3vh'}}/>
+                    </Box>
+                </Form>
+            </Box>
             <footer className="footer" style={{maxHeight: '10vh'}}>
                 <a rel="noopener noreferrer">Powered by Fawkes</a>
             </footer>

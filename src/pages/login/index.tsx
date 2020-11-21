@@ -1,6 +1,7 @@
-import { Box, Button, Form, FormField, TextInput } from 'grommet'
+import { Box, Button, Form, FormField, Header, TextInput } from 'grommet'
+import { FormPreviousLink } from 'grommet-icons';
 import Head from 'next/head'
-import { FormEvent, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 
 import firebase from '../../../lib/firebase'
 
@@ -10,12 +11,16 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    async function handleSubmit(event: FormEvent) {
+    function handleSubmit(event: FormEvent) {
         event.preventDefault();
         firebase.ref('chat/').once('value').then((snapshot: FormEvent) => {
             console.log(snapshot, 'snap')
         })
     }
+
+    const handleGoToIndex = useCallback(() => {
+        window.location.href = '../'
+    }, [])
 
     return (
         <div className="container">
@@ -23,8 +28,10 @@ function Login() {
                 <title>SemFila</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-        
-            <main className="main">
+            <Header background="brand" width="100%" margin="none">
+                <Button icon={<FormPreviousLink />} hoverIndicator onClick={handleGoToIndex}/>
+            </Header>
+            <Box className="main" pad="0">
                 <h1 className="title">SEM<a>FILA</a></h1>
                 <div className="grid">
                     <Form
@@ -40,12 +47,12 @@ function Login() {
                             <TextInput placeholder="Senha" required type="password" value={password} onChange={val => setPassword(val.target.value)}/>
                         </FormField>
                         <Box direction="row" justify="evenly">
-                            <Button type="submit" primary label="Entrar" color="#0070f3"/>
-                            <Button type="reset" label="Limpar" style={{borderColor: "#0070f3"}}/>
+                            <Button type="submit" primary label="Entrar"/>
+                            <Button type="reset" label="Limpar" />
                         </Box>
                     </Form>
                 </div>
-            </main>
+            </Box>
         
             <footer className="footer">
                 <a rel="noopener noreferrer">Powered by Fawkes</a>

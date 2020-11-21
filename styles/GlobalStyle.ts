@@ -22,7 +22,7 @@ export default createGlobalStyle`
 
     .container {
         min-height: 100vh;
-        padding: 0 0.5rem;
+        padding: 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -41,7 +41,7 @@ export default createGlobalStyle`
     .footer {
         width: 100%;
         height: 10vh;
-        border-top: 1px solid #eaeaea;
+        border-top: 1px solid #7D4CDB;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -58,7 +58,7 @@ export default createGlobalStyle`
     }
 
     .title a {
-        color: #0070f3;
+        color: #7D4CDB;
         text-decoration: none;
     }
 
@@ -117,8 +117,8 @@ export default createGlobalStyle`
     .card:hover,
     .card:focus,
     .card:active {
-        color: #0070f3;
-        border-color: #0070f3;
+        color: #7D4CDB;
+        border-color: #7D4CDB;
     }
 
     .card h3 {
