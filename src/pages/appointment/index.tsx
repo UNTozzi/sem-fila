@@ -31,17 +31,25 @@ function Appointment () {
     const [status, setStatus] = useState('');
 
     useEffect(() => {
-        let reference = firebase.ref('user/')
+        let reference = firebase.ref('usuario/')
         reference.on('value', (snapshot) => {
-            let operatorsToShow = []
             let clientToShow = []
-            let values: FuncionarioDTO | ClienteDTO = snapshot.val()
+            console.log(snapshot.val())
+            let values: ClienteDTO = snapshot.val()
             for (let prop in values) {
-                if (values[prop].funcionario === true) operatorsToShow.push(values[prop])
-                else clientToShow.push(values[prop])
+                clientToShow.push(values[prop])
             }
-            setFuncionarios(operatorsToShow)
             setClientes(clientToShow)
+        })
+
+        reference = firebase.ref('barbeiro/')
+        reference.on('value', (snapshot) => {
+            let barberToShow = []
+            let values: FuncionarioDTO = snapshot.val()
+            for (let prop in values) {
+                barberToShow.push(values[prop])
+            }
+            setFuncionarios(barberToShow)
         })
     }, [])
 
@@ -56,15 +64,15 @@ function Appointment () {
     function listaClientes () {
         let listaClientes = []
         for (let client in clientes) {
-            listaClientes.push(funcionarios[client].nome);
+            listaClientes.push(clientes[client].nome);
         } 
         return listaClientes
     }
 
     function handleSchedule () {
-        let firebaseKey = firebase.ref().child('appointment').push().key
+        let firebaseKey = firebase.ref().child('agendamento').push().key
         if (cliente === {}) setCliente('NENHUM')
-        firebase.ref('appointment/' + firebaseKey).set({ funcionario, cliente , key: firebaseKey, dataAgendamento, horario, status }).then((response: Response) => {
+        firebase.ref('agendamento/' + firebaseKey).set({ funcionario, cliente , key: firebaseKey, dataAgendamento, horario, status }).then((response: Response) => {
             window.location.href = '../home'
         })
     }
@@ -96,7 +104,7 @@ function Appointment () {
                         <Select
                             options={listaFuncionarios()}
                             value={funcionario}
-                            onChange={({ option }) => {setFuncionario(option); console.log(option)}}
+                            onChange={({ option }) => setFuncionario(option)}
                         />
                     </FormField>
                     <FormField label="Cliente">

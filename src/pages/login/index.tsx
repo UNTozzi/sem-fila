@@ -13,8 +13,14 @@ function Login() {
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        firebase.ref('chat/').once('value').then((snapshot: FormEvent) => {
-            console.log(snapshot, 'snap')
+        let reference = firebase.ref('barbearia/')
+        reference.on('value', (snapshot) => {
+            let values = snapshot.val()
+            for (let prop in values) {
+                if (email === values[prop].email && password === values[prop].senha) {
+                    window.location.href = '../home'
+                }
+            }
         })
     }
 

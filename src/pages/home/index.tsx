@@ -1,10 +1,10 @@
-import { Box, Button, DataTable, Header, Menu } from 'grommet'
+import { Box, Button, DataTable, Header } from 'grommet'
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
 
 import firebase from '../../../lib/firebase'
 
-import { Home, Logout } from 'grommet-icons'
+import { Logout, User } from 'grommet-icons'
 
 interface AppointmentDTO {
     cliente: ClienteDTO,
@@ -42,8 +42,12 @@ function Appointment () {
         window.location.href = '../'
     }, [])
     
+    const handleGoToBarber = useCallback(() => {
+        window.location.href = '../barber'
+    }, [])
+
     useEffect(() => {
-        let reference = firebase.ref('appointment/')
+        let reference = firebase.ref('agendamento/')
         reference.on('value', (snapshot) => {
             let appointmentToShow = []
             let values = snapshot.val()
@@ -61,7 +65,7 @@ function Appointment () {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header background="brand" width="100%" margin="none">
-                <Button icon={<Home />} hoverIndicator />
+                <Button icon={<User />} hoverIndicator label="Barbeiros" onClick={handleGoToBarber} style={{border: '0'}}/>
                 <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
             </Header>
             <Box className="main" pad="0" height="90vh" width="90vw" justify="start" margin={{top: '3vh'}}>

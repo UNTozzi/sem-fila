@@ -9,12 +9,12 @@ function Register() {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [nome, setNome] = useState('');
+    const [endereco, setEndereco] = useState('');
     const [nomeBarbearia, setNomeBarbearia] = useState('');
 
     function handleSubmit() {
-        let firebaseKey = firebase.ref().child('user').push().key
-        firebase.ref('user/' + firebaseKey).set({ nome, nomeBarbearia, email, senha, key: firebaseKey, funcionario: true }).then((response: Response) => {
+        let firebaseKey = firebase.ref().child('barbearia').push().key
+        firebase.ref('barbearia/' + firebaseKey).set({ endereco, nomeBarbearia, email, senha, key: firebaseKey }).then((response: Response) => {
             window.location.href = '../login/'
         })
     }
@@ -36,16 +36,16 @@ function Register() {
                 <h1 className="title">SEM<a>FILA</a></h1>
                 <Box className="grid" width="70vw" margin="0">
                     <Form
-                        onReset={() => (setSenha(''), setEmail(''), setNome(''), setNomeBarbearia(''))}
+                        onReset={() => (setSenha(''), setEmail(''), setEndereco(''), setNomeBarbearia(''))}
                         onSubmit={handleSubmit}
                         className="card"
                         style={{width: '40vw'}}
                     >
-                        <FormField label="Nome">
-                            <TextInput required type="text" value={nome} onChange={val => setNome(val.target.value)}/>
-                        </FormField>
                         <FormField label="Nome do estabelecimento">
                             <TextInput required type="text" value={nomeBarbearia} onChange={val => setNomeBarbearia(val.target.value)}/>
+                        </FormField>
+                        <FormField label="Endereço">
+                            <TextInput required type="text" value={endereco} onChange={val => setEndereco(val.target.value)}/>
                         </FormField>
                         <FormField label="Email">
                             <TextInput  required type="email" value={email} onChange={val => setEmail(val.target.value)}/>
