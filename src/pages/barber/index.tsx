@@ -1,12 +1,16 @@
 import { Box, Button, DataTable, Header } from 'grommet'
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
+import nookies from 'nookies'
+
 
 import firebase from '../../../lib/firebase'
 
-import { FormPreviousLink, Logout, UserAdd } from 'grommet-icons'
+import { Close, FormPreviousLink, Logout, Update, UserAdd } from 'grommet-icons'
 
-function Barber () {
+function Barber ({cookies}) {
+    console.log(cookies.barberToUpdate)
+
     const [barbers, setBarbers] = useState([]);
     
     const handleGoToDetail = useCallback(() => {
@@ -19,6 +23,15 @@ function Barber () {
     
     const handleGoToHome = useCallback(() => {
         window.location.href = '../home'
+    }, [])
+
+    const handleUpdate = useCallback((barber) => {
+        nookies.set(null, 'barberToUpdate', JSON.stringify(barber), {})
+        window.location.href = '../barber/detail'
+    }, [])
+
+    const handleDelete = useCallback((key) => {
+        firebase.ref('barbeiro/' + key).remove()
     }, [])
 
     useEffect(() => {
@@ -49,7 +62,6 @@ function Barber () {
                     <DataTable
                         style={{width: '70vw'}}
                         primaryKey={false}
-                        onClickRow={(data) => console.log(data.datum)}
                         border={{
                             header: {
                                 side: "bottom",
@@ -65,6 +77,17 @@ function Barber () {
                                 property: 'email',
                                 header: 'Email',
                                 align: 'center'
+                            },
+                            {
+                                property: '',
+                                header: '',
+                                align: 'end',
+                                render: datum => (
+                                    <Box direction="row">
+                                        <Button icon={<Update color="#7D4CDB" />} onClick={ () => handleUpdate(datum) } />
+                                        <Button icon={<Close color="#7D4CDB" />} onClick={() => handleDelete(datum.key)} />
+                                    </Box>
+                                )
                             }
                         ]}
                         data={barbers}
@@ -80,3 +103,22 @@ function Barber () {
 }
 
 export default Barber
+
+
+export async function getServerSideProps(ctx) {
+  // Parse
+    nookies.destroy(ctx, 'barberToUpdate')
+    const cookies = nookies.get(ctx)
+
+    console.log(cookies)
+  // Set
+    // nookies.set(ctx, 'barberToUpdate', 'value', {
+    //     maxAge: 30 * 24 * 60 * 60,
+    //     path: '/',
+    // })
+
+  // Destroy
+  // nookies.destroy(ctx, 'cookieName')
+
+    return { props: { cookies } }
+}
