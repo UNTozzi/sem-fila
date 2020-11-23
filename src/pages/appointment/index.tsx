@@ -1,9 +1,12 @@
-import { Box, Button, Form,  FormField, Header, MaskedInput, Menu, Select, TextInput } from 'grommet'
+import { Box, Button, Form,  FormField, Header,  Select, TextInput } from 'grommet'
 import { FormPreviousLink, Logout } from 'grommet-icons';
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
+import cookieCutter from 'cookie-cutter'
+
 
 import firebase from '../../../lib/firebase'
+import { GetServerSideProps } from 'next';
 
 interface ClienteDTO {
     email: string,
@@ -21,7 +24,16 @@ interface FuncionarioDTO {
     key: string;
 }
 
-function Appointment () {
+interface AppointmentDTO {
+    cliente: ClienteDTO,
+    dataAgendamento: string,
+    horario: string,
+    funcionario: FuncionarioDTO,
+    key: string;
+    status: string;
+}
+
+export default function Appointment () {
     const [funcionario, setFuncionario] = useState({});
     const [cliente, setCliente] = useState({});
     const [funcionarios, setFuncionarios] = useState([]);
@@ -29,12 +41,12 @@ function Appointment () {
     const [dataAgendamento, setDataAgendamento] = useState('');
     const [horario, setHorario] = useState('');
     const [status, setStatus] = useState('');
+    const [key, setkey] = useState('');
 
     useEffect(() => {
         let reference = firebase.ref('usuario/')
         reference.on('value', (snapshot) => {
             let clientToShow = []
-            console.log(snapshot.val())
             let values: ClienteDTO = snapshot.val()
             for (let prop in values) {
                 clientToShow.push(values[prop])
@@ -51,6 +63,18 @@ function Appointment () {
             }
             setFuncionarios(barberToShow)
         })
+
+        let cookie = cookieCutter.get('appointmentToUpdate')
+        if (cookie) {
+            cookieCutter.set('appointmentToUpdate', '', { expires: new Date(0) })
+            let appointmentToUpdate: AppointmentDTO = JSON.parse(cookie)
+            setCliente(appointmentToUpdate.cliente)
+            setFuncionario(appointmentToUpdate.funcionario)
+            setDataAgendamento(appointmentToUpdate.dataAgendamento)
+            setHorario(appointmentToUpdate.horario)
+            setStatus(appointmentToUpdate.status)
+            setkey(appointmentToUpdate.key)
+        }
     }, [])
 
     function listaFuncionarios () {
@@ -69,12 +93,24 @@ function Appointment () {
         return listaClientes
     }
 
+    // function handleUpdate () {
+        
+    // }
+
     function handleSchedule () {
-        let firebaseKey = firebase.ref().child('agendamento').push().key
-        if (cliente === {}) setCliente('NENHUM')
-        firebase.ref('agendamento/' + firebaseKey).set({ funcionario, cliente , key: firebaseKey, dataAgendamento, horario, status }).then((response: Response) => {
-            window.location.href = '../home'
-        })
+        if (!key) {
+            let firebaseKey = firebase.ref().child('agendamento').push().key
+            if (cliente === {}) setCliente('NENHUM')
+            firebase.ref('agendamento/' + firebaseKey).set({ funcionario, cliente , key: firebaseKey, dataAgendamento, horario, status }).then((response: Response) => {
+                window.location.href = '../home'
+            })
+        }
+        else {
+            if (cliente === {}) setCliente('NENHUM')
+            firebase.ref('agendamento/' + key).set({ funcionario, cliente , key, dataAgendamento, horario, status }).then((response: Response) => {
+                window.location.href = '../home'
+            })
+        }
     }
 
     const handleGoToHome = useCallback(() => {
@@ -137,7 +173,4 @@ function Appointment () {
             </footer>
         </div>
     )
-    
 }
-
-export default Appointment

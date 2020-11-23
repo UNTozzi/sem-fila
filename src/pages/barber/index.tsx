@@ -43,8 +43,8 @@ function Barber () {
                 <Button icon={<FormPreviousLink />} hoverIndicator onClick={handleGoToHome}/>
                 <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
             </Header>
-            <Box className="main" pad="0" height="90vh" width="90vw" justify="start" margin={{top: '3vh'}}>
-                <Button icon={<UserAdd />} alignSelf="end" style={{color: "white"}} onClick={handleGoToDetail} label="Novo Barbeiro"/>
+            <Box className="main" pad="0" height="90vh" justify="start" margin={{top: '3vh'}}>
+                <Button icon={<UserAdd color="white" />} alignSelf="end" style={{color: "white"}} onClick={handleGoToDetail} label="Novo Barbeiro"/>
                 <Box className="grid" direction="column">
                     <DataTable
                         style={{width: '70vw'}}

@@ -1,35 +1,11 @@
 import { Box, Button, DataTable, Header } from 'grommet'
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
+import cookieCutter from 'cookie-cutter'
 
 import firebase from '../../../lib/firebase'
 
-import { Logout, User } from 'grommet-icons'
-
-interface AppointmentDTO {
-    cliente: ClienteDTO,
-    dataAgendamento: string,
-    horario: string,
-    funcionario: FuncionarioDTO,
-    key: string;
-    status: string;
-}
-
-interface ClienteDTO {
-    email: string,
-    nome: string,
-    senha: string,
-    key: string;
-}
-
-interface FuncionarioDTO {
-    email: string,
-    nome: string,
-    senha: string,
-    nomeBarbearia: string,
-    funcionario: Boolean,
-    key: string;
-}
+import { Close, Logout, Update, User } from 'grommet-icons'
 
 function Appointment () {
     const [appointments, setAppointments] = useState([]);
@@ -46,6 +22,15 @@ function Appointment () {
         window.location.href = '../barber'
     }, [])
 
+    const handleUpdate = useCallback((appointment) => {
+        cookieCutter.set('appointmentToUpdate', JSON.stringify(appointment))
+        window.location.href = '../appointment'
+    }, [])
+
+    const handleDelete = useCallback((key) => {
+        firebase.ref('agendamento/' + key).remove()
+    }, [])
+
     useEffect(() => {
         let reference = firebase.ref('agendamento/')
         reference.on('value', (snapshot) => {
@@ -59,7 +44,7 @@ function Appointment () {
     }, [])
 
     return (
-        <div className="container">
+        <div className="container" style={{maxWidth: '100vw'}}>
             <Head>
                 <title>SemFila</title>
                 <link rel="icon" href="/favicon.ico" />
@@ -68,13 +53,12 @@ function Appointment () {
                 <Button icon={<User />} hoverIndicator label="Barbeiros" onClick={handleGoToBarber} style={{border: '0'}}/>
                 <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
             </Header>
-            <Box className="main" pad="0" height="90vh" width="90vw" justify="start" margin={{top: '3vh'}}>
+            <Box className="main" pad="0" height="90vh" justify="start" margin={{top: '3vh'}}>
                 <Button alignSelf="end" style={{color: "white"}} onClick={handleGoToAppointment} label="Agendar novo horário"/>
-                <Box className="grid" direction="column">
+                <Box className="grid" direction="column" style={{maxWidth: '100vw', overflowX: 'auto'}}>
                     <DataTable
-                        style={{width: '70vw'}}
+                        style={{ overflowX: 'scroll' }}
                         primaryKey={false}
-                        onClickRow={(data) => console.log(data.datum)}
                         border={{
                             header: {
                                 side: "bottom",
@@ -105,7 +89,19 @@ function Appointment () {
                                 property: 'status',
                                 header: 'Status',
                                 align: 'end'
+                            },
+                            {
+                                property: '',
+                                header: '',
+                                align: 'end',
+                                render: datum => (
+                                    <Box direction="row">
+                                        <Button icon={<Update color="#7D4CDB" />} onClick={ () => handleUpdate(datum) } />
+                                        <Button icon={<Close color="#7D4CDB" />} onClick={() => handleDelete(datum.key)} />
+                                    </Box>
+                                )
                             }
+
                         ]}
                         data={appointments}
                     />

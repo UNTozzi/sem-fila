@@ -34,12 +34,11 @@ function OperatorRegister() {
             </Header>
             <Box className="main" height="90vh" pad="0">
                 <h1 className="title">SEM<a>FILA</a></h1>
-                <Box className="grid" width="70vw" margin="0">
+                <Box className="grid" margin="0">
                     <Form
                         onReset={() => (setEmail(''), setNome(''))}
                         onSubmit={handleSubmit}
                         className="card"
-                        style={{width: '40vw'}}
                     >
                         <FormField label="Nome">
                             <TextInput required type="text" value={nome} onChange={val => setNome(val.target.value)}/>

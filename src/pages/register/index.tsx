@@ -34,12 +34,11 @@ function Register() {
             </Header>
             <Box className="main" height="90vh" pad="0">
                 <h1 className="title">SEM<a>FILA</a></h1>
-                <Box className="grid" width="70vw" margin="0">
+                <Box className="grid"  margin="0">
                     <Form
                         onReset={() => (setSenha(''), setEmail(''), setEndereco(''), setNomeBarbearia(''))}
                         onSubmit={handleSubmit}
                         className="card"
-                        style={{width: '40vw'}}
                     >
                         <FormField label="Nome do estabelecimento">
                             <TextInput required type="text" value={nomeBarbearia} onChange={val => setNomeBarbearia(val.target.value)}/>

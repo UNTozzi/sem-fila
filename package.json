@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "cookie-cutter": "^0.2.0",
     "firebase": "^8.0.1",
     "grommet": "^2.15.2",
     "grommet-icons": "^4.5.0",
