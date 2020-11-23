@@ -2,6 +2,7 @@ import { Box, Button, Form, FormField, Header, TextInput } from 'grommet'
 import { FormPreviousLink } from 'grommet-icons';
 import Head from 'next/head'
 import { FormEvent, useCallback, useState } from 'react';
+import nookies, { setCookie } from 'nookies'
 
 import firebase from '../../../lib/firebase'
 
@@ -18,6 +19,7 @@ function Login() {
             let values = snapshot.val()
             for (let prop in values) {
                 if (email === values[prop].email && password === values[prop].senha) {
+                    setCookie(null, 'contentBarbearia', JSON.stringify(values[prop]), {})
                     window.location.href = '../home'
                 }
             }
@@ -69,3 +71,9 @@ function Login() {
 }
 
 export default Login
+
+export async function getServerSideProps(ctx) {
+    const cookies = nookies.get(ctx)
+
+    return { props: { cookies } }
+}

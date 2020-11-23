@@ -2,12 +2,9 @@ import { Box, Button, Form,  FormField, Header,  Select, TextInput } from 'gromm
 import { FormPreviousLink, Logout } from 'grommet-icons';
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
-import cookieCutter from 'cookie-cutter'
-
+import nookies, { destroyCookie } from 'nookies'
 
 import firebase from '../../../lib/firebase'
-import { GetServerSideProps } from 'next';
-
 interface ClienteDTO {
     email?: string,
     nome: string,
@@ -31,9 +28,10 @@ interface AppointmentDTO {
     funcionario: FuncionarioDTO,
     key: string;
     status: string;
+    barbearia: object;
 }
 
-export default function Appointment () {
+export default function Appointment ({ cookies }) {
     const [funcionario, setFuncionario] = useState<FuncionarioDTO>({key: '', nome: ''});
     const [cliente, setCliente] = useState<ClienteDTO>({key: '', nome: ''});
     const [funcionarios, setFuncionarios] = useState<FuncionarioDTO[]>([]);
@@ -44,6 +42,7 @@ export default function Appointment () {
     const [key, setkey] = useState('');
 
     useEffect(() => {
+        if(!cookies.contentBarbearia) window.location.href = '../'
         let reference = firebase.ref('usuario/')
         reference.on('value', (snapshot) => {
             let clientToShow = []
@@ -64,9 +63,9 @@ export default function Appointment () {
             setFuncionarios(barberToShow)
         })
 
-        let cookie = cookieCutter.get('appointmentToUpdate')
+        let cookie = cookies.appointmentToUpdate
         if (cookie) {
-            cookieCutter.set('appointmentToUpdate', '', { expires: new Date(0) })
+            destroyCookie(null, 'appointmentToUpdate')
             let appointmentToUpdate: AppointmentDTO = JSON.parse(cookie)
             setCliente(appointmentToUpdate.cliente)
             setFuncionario(appointmentToUpdate.funcionario)
@@ -76,26 +75,6 @@ export default function Appointment () {
             setkey(appointmentToUpdate.key)
         }
     }, [])
-
-    // function listaFuncionarios () {
-    //     let listaFuncionarios = []
-    //     for (let func in funcionarios) {
-    //         listaFuncionarios.push({lab: funcionarios[func].nome, val: funcionarios[func]});
-    //     } 
-    //     return listaFuncionarios
-    // }
-
-    // function listaClientes () {
-    //     let listaClientes = []
-    //     for (let client in clientes) {
-    //         listaClientes.push(clientes[client].nome);
-    //     } 
-    //     return listaClientes
-    // }
-
-    // function handleUpdate () {
-        
-    // }
 
     function handleSchedule () {
         if (!key) {
@@ -128,7 +107,6 @@ export default function Appointment () {
             </Head>
             <Header background="brand" width="100%" margin="none">
                 <Button icon={<FormPreviousLink/>} hoverIndicator onClick={handleGoToHome}/>
-                <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
             </Header>
             <Box className="main" pad="0">
                 <Form
@@ -138,6 +116,7 @@ export default function Appointment () {
                     <FormField label="Funcionário">
                         <Select
                             options={funcionarios}
+                            emptySearchMessage="Nenhum barbeiro cadastrado"
                             labelKey="nome"
                             valueKey="key"
                             value={funcionario}
@@ -147,6 +126,7 @@ export default function Appointment () {
                     <FormField label="Cliente">
                         <Select
                             options={clientes}
+                            emptySearchMessage="Nenhum cliente cadastrado"
                             labelKey="nome"
                             valueKey="key"
                             value={cliente}
@@ -161,7 +141,7 @@ export default function Appointment () {
                     </FormField>
                     <FormField label="Status">
                         <Select
-                            options={['Livre', 'Marcado', 'Cancelado']}
+                            options={cliente.nome ? [, 'Marcado', 'Cancelado'] : ['Livre']}
                             value={status}
                             onChange={({ option }) => setStatus(option)}
                         />
@@ -176,4 +156,9 @@ export default function Appointment () {
             </footer>
         </div>
     )
+}
+
+export async function getServerSideProps(ctx) {
+    const cookies = nookies.get(ctx)
+    return { props: { cookies } }
 }

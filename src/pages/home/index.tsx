@@ -1,13 +1,14 @@
 import { Box, Button, DataTable, Header, Text } from 'grommet'
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
-import cookieCutter from 'cookie-cutter'
+import nookies, { destroyCookie, setCookie } from 'nookies'
+
 
 import firebase from '../../../lib/firebase'
 
 import { Close, Logout, Update, User } from 'grommet-icons'
 
-function Appointment () {
+function Appointment ({ cookies }) {
     const [appointments, setAppointments] = useState([]);
     
     const handleGoToAppointment = useCallback(() => {
@@ -15,6 +16,7 @@ function Appointment () {
     }, [])
 
     const handleLogout = useCallback(() => {
+        destroyCookie(null, 'contentBarbearia')
         window.location.href = '../'
     }, [])
     
@@ -23,7 +25,7 @@ function Appointment () {
     }, [])
 
     const handleUpdate = useCallback((appointment) => {
-        cookieCutter.set('appointmentToUpdate', JSON.stringify(appointment))
+        setCookie(null, 'appointmentToUpdate', JSON.stringify(appointment), {})
         window.location.href = '../appointment'
     }, [])
 
@@ -32,6 +34,7 @@ function Appointment () {
     }, [])
 
     useEffect(() => {
+        if(!cookies.contentBarbearia) window.location.href = '../'
         let reference = firebase.ref('agendamento/')
         reference.on('value', (snapshot) => {
             let appointmentToShow = []
@@ -118,3 +121,8 @@ function Appointment () {
 }
 
 export default Appointment
+
+export async function getServerSideProps(ctx) {
+    const cookies = nookies.get(ctx)
+    return { props: { cookies } }
+}

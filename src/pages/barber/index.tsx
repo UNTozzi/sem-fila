@@ -1,7 +1,7 @@
 import { Box, Button, DataTable, Header } from 'grommet'
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
-import nookies from 'nookies'
+import nookies, { destroyCookie } from 'nookies'
 
 
 import firebase from '../../../lib/firebase'
@@ -9,8 +9,6 @@ import firebase from '../../../lib/firebase'
 import { Close, FormPreviousLink, Logout, Update, UserAdd } from 'grommet-icons'
 
 function Barber ({cookies}) {
-    console.log(cookies.barberToUpdate)
-
     const [barbers, setBarbers] = useState([]);
     
     const handleGoToDetail = useCallback(() => {
@@ -18,6 +16,7 @@ function Barber ({cookies}) {
     }, [])
 
     const handleLogout = useCallback(() => {
+        destroyCookie(null, 'contentBarbearia')
         window.location.href = '../'
     }, [])
     
@@ -35,6 +34,7 @@ function Barber ({cookies}) {
     }, [])
 
     useEffect(() => {
+        if(!cookies.contentBarbearia) window.location.href = '../'
         let reference = firebase.ref('barbeiro/')
         reference.on('value', (snapshot) => {
             let barbersToShow = []
