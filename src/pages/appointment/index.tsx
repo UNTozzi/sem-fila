@@ -9,18 +9,18 @@ import firebase from '../../../lib/firebase'
 import { GetServerSideProps } from 'next';
 
 interface ClienteDTO {
-    email: string,
+    email?: string,
     nome: string,
-    senha: string,
+    senha?: string,
     key: string;
 }
 
 interface FuncionarioDTO {
-    email: string,
+    email?: string,
     nome: string,
-    senha: string,
-    nomeBarbearia: string,
-    funcionario: Boolean,
+    senha?: string,
+    nomeBarbearia?: string,
+    funcionario?: Boolean,
     key: string;
 }
 
@@ -34,10 +34,10 @@ interface AppointmentDTO {
 }
 
 export default function Appointment () {
-    const [funcionario, setFuncionario] = useState({});
-    const [cliente, setCliente] = useState({});
-    const [funcionarios, setFuncionarios] = useState([]);
-    const [clientes, setClientes] = useState([]);
+    const [funcionario, setFuncionario] = useState<FuncionarioDTO>({key: '', nome: ''});
+    const [cliente, setCliente] = useState<ClienteDTO>({key: '', nome: ''});
+    const [funcionarios, setFuncionarios] = useState<FuncionarioDTO[]>([]);
+    const [clientes, setClientes] = useState<ClienteDTO[]>([]);
     const [dataAgendamento, setDataAgendamento] = useState('');
     const [horario, setHorario] = useState('');
     const [status, setStatus] = useState('');
@@ -77,21 +77,21 @@ export default function Appointment () {
         }
     }, [])
 
-    function listaFuncionarios () {
-        let listaFuncionarios = []
-        for (let func in funcionarios) {
-            listaFuncionarios.push(funcionarios[func].nome);
-        } 
-        return listaFuncionarios
-    }
+    // function listaFuncionarios () {
+    //     let listaFuncionarios = []
+    //     for (let func in funcionarios) {
+    //         listaFuncionarios.push({lab: funcionarios[func].nome, val: funcionarios[func]});
+    //     } 
+    //     return listaFuncionarios
+    // }
 
-    function listaClientes () {
-        let listaClientes = []
-        for (let client in clientes) {
-            listaClientes.push(clientes[client].nome);
-        } 
-        return listaClientes
-    }
+    // function listaClientes () {
+    //     let listaClientes = []
+    //     for (let client in clientes) {
+    //         listaClientes.push(clientes[client].nome);
+    //     } 
+    //     return listaClientes
+    // }
 
     // function handleUpdate () {
         
@@ -100,13 +100,12 @@ export default function Appointment () {
     function handleSchedule () {
         if (!key) {
             let firebaseKey = firebase.ref().child('agendamento').push().key
-            if (cliente === {}) setCliente('NENHUM')
+            console.log(funcionario)
             firebase.ref('agendamento/' + firebaseKey).set({ funcionario, cliente , key: firebaseKey, dataAgendamento, horario, status }).then((response: Response) => {
                 window.location.href = '../home'
             })
         }
         else {
-            if (cliente === {}) setCliente('NENHUM')
             firebase.ref('agendamento/' + key).set({ funcionario, cliente , key, dataAgendamento, horario, status }).then((response: Response) => {
                 window.location.href = '../home'
             })
@@ -138,14 +137,18 @@ export default function Appointment () {
                 >
                     <FormField label="Funcionário">
                         <Select
-                            options={listaFuncionarios()}
+                            options={funcionarios}
+                            labelKey="nome"
+                            valueKey="key"
                             value={funcionario}
-                            onChange={({ option }) => setFuncionario(option)}
+                            onChange={({option}) => setFuncionario(option)}
                         />
                     </FormField>
                     <FormField label="Cliente">
                         <Select
-                            options={listaClientes()}
+                            options={clientes}
+                            labelKey="nome"
+                            valueKey="key"
                             value={cliente}
                             onChange={({ option }) => setCliente(option)}
                         />

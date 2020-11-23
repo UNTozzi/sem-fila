@@ -1,4 +1,4 @@
-import { Box, Button, DataTable, Header } from 'grommet'
+import { Box, Button, DataTable, Header, Text } from 'grommet'
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
 import cookieCutter from 'cookie-cutter'
@@ -69,11 +69,13 @@ function Appointment () {
                             {
                                 property: 'funcionario',
                                 header: 'Funcionário',
+                                render: datum => datum.funcionario.nome 
                             },
                             {
                                 property: 'cliente',
                                 header: 'Cliente',
-                                align: 'center'
+                                align: 'center',
+                                render: datum => datum.cliente.nome || <Text color="#7D4CDB">Nenhum</Text>
                             },
                             {
                                 property: 'dataAgendamento',
