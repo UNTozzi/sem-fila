@@ -106,19 +106,8 @@ export default Barber
 
 
 export async function getServerSideProps(ctx) {
-  // Parse
     nookies.destroy(ctx, 'barberToUpdate')
     const cookies = nookies.get(ctx)
-
-    console.log(cookies)
-  // Set
-    // nookies.set(ctx, 'barberToUpdate', 'value', {
-    //     maxAge: 30 * 24 * 60 * 60,
-    //     path: '/',
-    // })
-
-  // Destroy
-  // nookies.destroy(ctx, 'cookieName')
 
     return { props: { cookies } }
 }
