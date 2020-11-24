@@ -28,7 +28,8 @@ interface BarbeariaDTO {
 interface AppointmentDTO {
     cliente: ClienteDTO,
     dataAgendamento: string,
-    horario: string,
+    horarioInicio: string,
+    horarioFim: string,
     funcionario: FuncionarioDTO,
     key: string;
     status: string;
@@ -42,7 +43,8 @@ export default function Appointment ({ cookies }) {
     const [funcionarios, setFuncionarios] = useState<FuncionarioDTO[]>([]);
     const [clientes, setClientes] = useState<ClienteDTO[]>([]);
     const [dataAgendamento, setDataAgendamento] = useState('');
-    const [horario, setHorario] = useState('');
+    const [horarioInicio, setHorarioInicio] = useState('');
+    const [horarioFim, setHorarioFim] = useState('');
     const [status, setStatus] = useState('');
     const [key, setkey] = useState('');
 
@@ -80,7 +82,8 @@ export default function Appointment ({ cookies }) {
             setCliente(appointmentToUpdate.cliente)
             setFuncionario(appointmentToUpdate.funcionario)
             setDataAgendamento(appointmentToUpdate.dataAgendamento)
-            setHorario(appointmentToUpdate.horario)
+            setHorarioInicio(appointmentToUpdate.horarioInicio)
+            setHorarioFim(appointmentToUpdate.horarioFim)
             setStatus(appointmentToUpdate.status)
             setkey(appointmentToUpdate.key)
         }
@@ -90,12 +93,12 @@ export default function Appointment ({ cookies }) {
         if (!key) {
             let firebaseKey = firebase.ref().child('agendamento').push().key
             console.log(funcionario)
-            firebase.ref('agendamento/' + firebaseKey).set({ barbearia, funcionario, cliente , key: firebaseKey, dataAgendamento, horario, status }).then((response: Response) => {
+            firebase.ref('agendamento/' + firebaseKey).set({ barbearia, funcionario, cliente , key: firebaseKey, dataAgendamento, horarioInicio, horarioFim, status }).then((response: Response) => {
                 window.location.href = '../home'
             })
         }
         else {
-            firebase.ref('agendamento/' + key).set({ barbearia, funcionario, cliente , key, dataAgendamento, horario, status }).then((response: Response) => {
+            firebase.ref('agendamento/' + key).set({ barbearia, funcionario, cliente , key, dataAgendamento, horarioInicio, horarioFim, status }).then((response: Response) => {
                 window.location.href = '../home'
             })
         }
@@ -117,7 +120,7 @@ export default function Appointment ({ cookies }) {
             <Box className="main" pad="0">
                 <Form
                     onSubmit={handleSchedule}
-                    style={{maxHeight: '80vh', maxWidth: '80vw', width: '80vw', margin: 0}}
+                    style={{maxWidth: '80vw', width: '80vw', margin: 0}}
                 >
                     <FormField label="Funcionário">
                         <Select
@@ -139,13 +142,16 @@ export default function Appointment ({ cookies }) {
                             onChange={({ option }) => setCliente(option)}
                         />
                     </FormField>
-                    <FormField label="Data do agendamento">
+                    <FormField label="Data do agendamento" >
                         <TextInput type="date" value={dataAgendamento} onChange={value => setDataAgendamento(value.target.value)}/>
                     </FormField>
-                    <FormField label="Horário">
-                        <TextInput type="time" value={horario} onChange={value => setHorario(value.target.value)}/>
+                    <FormField label="Começa" >
+                        <TextInput type="time" value={horarioInicio} onChange={value => setHorarioInicio(value.target.value)}/>
                     </FormField>
-                    <FormField label="Status">
+                    <FormField label="Termina" >
+                        <TextInput type="time" value={horarioFim} onChange={value => setHorarioFim(value.target.value)}/>
+                    </FormField>
+                    <FormField label="Status" >
                         <Select
                             options={cliente.nome ? [, 'Marcado', 'Cancelado'] : ['Livre']}
                             value={status}
@@ -157,7 +163,7 @@ export default function Appointment ({ cookies }) {
                     </Box>
                 </Form>
             </Box>
-            <footer className="footer" style={{maxHeight: '10vh'}}>
+            <footer className="footer" style={{maxHeight: '10vh', marginTop: '3vh'}}>
                 <a rel="noopener noreferrer">Powered by Fawkes</a>
             </footer>
         </div>

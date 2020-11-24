@@ -73,6 +73,7 @@ function Appointment ({ cookies }) {
                             {
                                 property: 'funcionario',
                                 header: 'Funcionário',
+                                align: 'start',
                                 render: datum => datum.funcionario.nome 
                             },
                             {
@@ -93,9 +94,14 @@ function Appointment ({ cookies }) {
                                 align: 'center'
                             },
                             {
-                                property: 'horario',
-                                header: 'Horário',
-                                align: 'end'
+                                property: 'horarioInicio',
+                                header: 'Começa',
+                                align: 'center'
+                            },
+                            {
+                                property: 'horarioFim',
+                                header: 'Termina',
+                                align: 'center'
                             },
                             {
                                 property: 'status',
