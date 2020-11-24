@@ -14,13 +14,17 @@ interface BarbeiroDTO {
     nome: string,
     key: string;
 }
+interface BarbeariaDTO {
+    endereco: string;
+    key: string
+}
 
 function OperatorRegister({cookies}) {
 
     const [email, setEmail] = useState('');
     const [nome, setNome] = useState('');
     const [key, setKey] = useState('');
-    const [barbearia, setBarbearia] = useState({});
+    const [barbearia, setBarbearia] = useState<BarbeariaDTO>({key: '', endereco: ''});
 
     function handleSubmit() {
         if (!key) {
@@ -41,6 +45,11 @@ function OperatorRegister({cookies}) {
     }, [])
 
     useEffect(() => {
+        if(!cookies.contentBarbearia) window.location.href = '../'
+        else {
+            let barbeariaCookie: BarbeariaDTO = JSON.parse(cookies.contentBarbearia)
+            setBarbearia({key: barbeariaCookie.key, endereco: barbeariaCookie.endereco})
+        }
         let cookie = cookies.barberToUpdate
         destroyCookie(null, 'barberToUpdate')
         if (cookie) {

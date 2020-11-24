@@ -21,6 +21,10 @@ interface FuncionarioDTO {
     key: string;
 }
 
+interface BarbeariaDTO {
+    endereco: string;
+    key: string
+}
 interface AppointmentDTO {
     cliente: ClienteDTO,
     dataAgendamento: string,
@@ -32,6 +36,7 @@ interface AppointmentDTO {
 }
 
 export default function Appointment ({ cookies }) {
+    const [barbearia, setBarbearia] = useState<BarbeariaDTO>({key: '', endereco: ''});
     const [funcionario, setFuncionario] = useState<FuncionarioDTO>({key: '', nome: ''});
     const [cliente, setCliente] = useState<ClienteDTO>({key: '', nome: ''});
     const [funcionarios, setFuncionarios] = useState<FuncionarioDTO[]>([]);
@@ -43,6 +48,10 @@ export default function Appointment ({ cookies }) {
 
     useEffect(() => {
         if(!cookies.contentBarbearia) window.location.href = '../'
+        else {
+            let barbeariaCookie: BarbeariaDTO = JSON.parse(cookies.contentBarbearia)
+            setBarbearia({key: barbeariaCookie.key, endereco: barbeariaCookie.endereco})
+        }
         let reference = firebase.ref('usuario/')
         reference.on('value', (snapshot) => {
             let clientToShow = []
@@ -57,8 +66,9 @@ export default function Appointment ({ cookies }) {
         reference.on('value', (snapshot) => {
             let barberToShow = []
             let values: FuncionarioDTO = snapshot.val()
+            let barbeariaCookie = JSON.parse(cookies.contentBarbearia)
             for (let prop in values) {
-                barberToShow.push(values[prop])
+                if (values[prop].barbearia.key === barbeariaCookie.key) barberToShow.push(values[prop])
             }
             setFuncionarios(barberToShow)
         })
@@ -80,12 +90,12 @@ export default function Appointment ({ cookies }) {
         if (!key) {
             let firebaseKey = firebase.ref().child('agendamento').push().key
             console.log(funcionario)
-            firebase.ref('agendamento/' + firebaseKey).set({ funcionario, cliente , key: firebaseKey, dataAgendamento, horario, status }).then((response: Response) => {
+            firebase.ref('agendamento/' + firebaseKey).set({ barbearia, funcionario, cliente , key: firebaseKey, dataAgendamento, horario, status }).then((response: Response) => {
                 window.location.href = '../home'
             })
         }
         else {
-            firebase.ref('agendamento/' + key).set({ funcionario, cliente , key, dataAgendamento, horario, status }).then((response: Response) => {
+            firebase.ref('agendamento/' + key).set({ barbearia, funcionario, cliente , key, dataAgendamento, horario, status }).then((response: Response) => {
                 window.location.href = '../home'
             })
         }
@@ -93,10 +103,6 @@ export default function Appointment ({ cookies }) {
 
     const handleGoToHome = useCallback(() => {
         window.location.href = '../home'
-    }, [])
-
-    const handleLogout = useCallback(() => {
-        window.location.href = '../'
     }, [])
 
     return (

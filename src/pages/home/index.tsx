@@ -39,8 +39,9 @@ function Appointment ({ cookies }) {
         reference.on('value', (snapshot) => {
             let appointmentToShow = []
             let values = snapshot.val()
+            let barbeariaCookie = JSON.parse(cookies.contentBarbearia)
             for (let prop in values) {
-                appointmentToShow.push(values[prop])
+                if (values[prop].barbearia.key === barbeariaCookie.key) appointmentToShow.push(values[prop])
             }
             setAppointments(appointmentToShow)
         })
@@ -79,6 +80,12 @@ function Appointment ({ cookies }) {
                                 header: 'Cliente',
                                 align: 'center',
                                 render: datum => datum.cliente.nome || <Text color="#7D4CDB">Nenhum</Text>
+                            },
+                            {
+                                property: 'endereco',
+                                header: 'Endereço',
+                                align: 'center',
+                                render: datum => datum.barbearia.endereco || <Text color="#7D4CDB">Sem registro</Text>
                             },
                             {
                                 property: 'dataAgendamento',

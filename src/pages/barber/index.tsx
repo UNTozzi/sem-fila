@@ -39,8 +39,9 @@ function Barber ({cookies}) {
         reference.on('value', (snapshot) => {
             let barbersToShow = []
             let values = snapshot.val()
+            let barbeariaCookie = JSON.parse(cookies.contentBarbearia)
             for (let prop in values) {
-                barbersToShow.push(values[prop])
+                if (values[prop].barbearia.key === barbeariaCookie.key) barbersToShow.push(values[prop])
             }
             setBarbers(barbersToShow)
         })
