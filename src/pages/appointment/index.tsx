@@ -22,6 +22,7 @@ interface FuncionarioDTO {
 }
 
 interface BarbeariaDTO {
+    nomeBarbearia: string;
     endereco: string;
     key: string
 }
@@ -37,7 +38,7 @@ interface AppointmentDTO {
 }
 
 export default function Appointment ({ cookies }) {
-    const [barbearia, setBarbearia] = useState<BarbeariaDTO>({key: '', endereco: ''});
+    const [barbearia, setBarbearia] = useState<BarbeariaDTO>({key: '', endereco: '', nomeBarbearia: ''});
     const [funcionario, setFuncionario] = useState<FuncionarioDTO>({key: '', nome: ''});
     const [cliente, setCliente] = useState<ClienteDTO>({key: '', nome: ''});
     const [funcionarios, setFuncionarios] = useState<FuncionarioDTO[]>([]);
@@ -52,7 +53,7 @@ export default function Appointment ({ cookies }) {
         if(!cookies.contentBarbearia) window.location.href = '../'
         else {
             let barbeariaCookie: BarbeariaDTO = JSON.parse(cookies.contentBarbearia)
-            setBarbearia({key: barbeariaCookie.key, endereco: barbeariaCookie.endereco})
+            setBarbearia({key: barbeariaCookie.key, endereco: barbeariaCookie.endereco, nomeBarbearia: barbeariaCookie.nomeBarbearia})
         }
         let reference = firebase.ref('usuario/')
         reference.on('value', (snapshot) => {
@@ -121,6 +122,7 @@ export default function Appointment ({ cookies }) {
                 <Form
                     onSubmit={handleSchedule}
                     style={{maxWidth: '80vw', width: '80vw', margin: 0}}
+                    messages={{required: 'Obrigatório'}}
                 >
                     <FormField label="Funcionário">
                         <Select
