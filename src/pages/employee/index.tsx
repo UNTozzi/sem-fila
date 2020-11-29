@@ -9,14 +9,14 @@ import firebase from '../../../lib/firebase'
 import { Close, FormPreviousLink, Logout, Update, UserAdd } from 'grommet-icons'
 
 function Barber ({cookies}) {
-    const [barbers, setBarbers] = useState([]);
+    const [employees, setBarbers] = useState([]);
     
     const handleGoToDetail = useCallback(() => {
-        window.location.href = '../barber/detail'
+        window.location.href = '../employee/detail'
     }, [])
 
     const handleLogout = useCallback(() => {
-        destroyCookie(null, 'contentBarbearia')
+        destroyCookie(null, 'contentEstabelecimento')
         window.location.href = '../'
     }, [])
     
@@ -24,26 +24,26 @@ function Barber ({cookies}) {
         window.location.href = '../home'
     }, [])
 
-    const handleUpdate = useCallback((barber) => {
-        nookies.set(null, 'barberToUpdate', JSON.stringify(barber), {})
-        window.location.href = '../barber/detail'
+    const handleUpdate = useCallback((employee) => {
+        nookies.set(null, 'employeeToUpdate', JSON.stringify(employee), {})
+        window.location.href = '../employee/detail'
     }, [])
 
     const handleDelete = useCallback((key) => {
-        firebase.ref('barbeiro/' + key).remove()
+        firebase.ref('funcionario/' + key).remove()
     }, [])
 
     useEffect(() => {
-        if(!cookies.contentBarbearia) window.location.href = '../'
-        let reference = firebase.ref('barbeiro/')
+        if(!cookies.contentEstabelecimento) window.location.href = '../'
+        let reference = firebase.ref('funcionario/')
         reference.on('value', (snapshot) => {
-            let barbersToShow = []
+            let employeesToShow = []
             let values = snapshot.val()
-            let barbeariaCookie = JSON.parse(cookies.contentBarbearia)
+            let estabelecimentoCookie = JSON.parse(cookies.contentEstabelecimento)
             for (let prop in values) {
-                if (values[prop].barbearia.key === barbeariaCookie.key) barbersToShow.push(values[prop])
+                if (values[prop].estabelecimento.key === estabelecimentoCookie.key) employeesToShow.push(values[prop])
             }
-            setBarbers(barbersToShow)
+            setBarbers(employeesToShow)
         })
     }, [])
 
@@ -58,7 +58,7 @@ function Barber ({cookies}) {
                 <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
             </Header>
             <Box className="main" pad="0" height="90vh" justify="start" margin={{top: '3vh'}}>
-                <Button icon={<UserAdd color="white" />} alignSelf="end" style={{color: "white"}} onClick={handleGoToDetail} label="Novo Barbeiro"/>
+                <Button icon={<UserAdd color="white" />} alignSelf="end" style={{color: "white"}} onClick={handleGoToDetail} label="Novo Funcionario"/>
                 <Box className="grid" direction="column">
                     <DataTable
                         style={{width: '70vw'}}
@@ -91,7 +91,7 @@ function Barber ({cookies}) {
                                 )
                             }
                         ]}
-                        data={barbers}
+                        data={employees}
                     />
                 </Box>
             </Box>
@@ -107,7 +107,7 @@ export default Barber
 
 
 export async function getServerSideProps(ctx) {
-    nookies.destroy(ctx, 'barberToUpdate')
+    nookies.destroy(ctx, 'employeeToUpdate')
     const cookies = nookies.get(ctx)
 
     return { props: { cookies } }

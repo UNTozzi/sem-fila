@@ -1,12 +1,13 @@
 import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
+
     html,
     body {
         padding: 0;
         margin: 0;
         background-color: #121214;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
         color: white;
     }
@@ -18,6 +19,36 @@ export default createGlobalStyle`
 
     * {
         box-sizing: border-box;
+    }
+
+    .input-default {
+        width: 100% !important;
+        height: 50px !important;
+        font-size: 16px !important;
+        background: rgb(18, 18, 20) !important;
+        border-color: rgb(18, 18, 20) !important;
+        color: rgb(255, 255, 255) !important;
+        padding: 0px 1em 0px 2.80em !important;
+        border-radius: 5px !important;
+    }
+
+    .input-default:active {
+        border: 2px #7D4CDB !important;
+    }
+
+    .button-primary {
+        background: #7D4CDB !important;
+        border-radius: 5px !important;
+        border: 0 !important;
+        text-align: center !important;
+        color: white !important;
+        font-weight: bold !important;
+        padding: 0.6rem 2rem !important;
+    }
+
+    .button-primary:hover {
+        border: 2px #7D4CDB !important;
+        outline: none !important;
     }
 
     .container {

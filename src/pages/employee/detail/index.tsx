@@ -9,12 +9,12 @@ import nookies, { destroyCookie } from 'nookies'
 
 import firebase from '../../../../lib/firebase'
 
-interface BarbeiroDTO {
+interface FuncionarioDTO {
     email: string,
     nome: string,
     key: string;
 }
-interface BarbeariaDTO {
+interface EstabelecimentoDTO {
     endereco: string;
     key: string
 }
@@ -24,39 +24,39 @@ function OperatorRegister({cookies}) {
     const [email, setEmail] = useState('');
     const [nome, setNome] = useState('');
     const [key, setKey] = useState('');
-    const [barbearia, setBarbearia] = useState<BarbeariaDTO>({key: '', endereco: ''});
+    const [estabelecimento, setEstabelecimento] = useState<EstabelecimentoDTO>({key: '', endereco: ''});
 
     function handleSubmit() {
         if (!key) {
-            let firebaseKey = firebase.ref().child('barbeiro').push().key
-            firebase.ref('barbeiro/' + firebaseKey).set({ nome, barbearia, email, key: firebaseKey}).then((response: NextApiResponse) => {
+            let firebaseKey = firebase.ref().child('funcionario').push().key
+            firebase.ref('funcionario/' + firebaseKey).set({ nome, estabelecimento, email, key: firebaseKey}).then((response: NextApiResponse) => {
                 handleReturn()
             })
         }
         else {
-            firebase.ref('barbeiro/' + key).set({ nome, barbearia, email, key}).then((response: NextApiResponse) => {
+            firebase.ref('funcionario/' + key).set({ nome, estabelecimento, email, key}).then((response: NextApiResponse) => {
                 handleReturn()
             })
         }
     }
 
     const handleReturn = useCallback(() => {
-        window.location.href = '../barber'
+        window.location.href = '../employee'
     }, [])
 
     useEffect(() => {
-        if(!cookies.contentBarbearia) window.location.href = '../'
+        if(!cookies.contentEstabelecimento) window.location.href = '../'
         else {
-            let barbeariaCookie: BarbeariaDTO = JSON.parse(cookies.contentBarbearia)
-            setBarbearia({key: barbeariaCookie.key, endereco: barbeariaCookie.endereco})
+            let estabelecimentoCookie: EstabelecimentoDTO = JSON.parse(cookies.contentEstabelecimento)
+            setEstabelecimento({key: estabelecimentoCookie.key, endereco: estabelecimentoCookie.endereco})
         }
-        let cookie = cookies.barberToUpdate
-        destroyCookie(null, 'barberToUpdate')
+        let cookie = cookies.employeeToUpdate
+        destroyCookie(null, 'employeeToUpdate')
         if (cookie) {
-            let barberToUpdate: BarbeiroDTO = JSON.parse(cookie)
-            setNome(barberToUpdate.nome)
-            setEmail(barberToUpdate.email)
-            setKey(barberToUpdate.key)
+            let employeeToUpdate: FuncionarioDTO = JSON.parse(cookie)
+            setNome(employeeToUpdate.nome)
+            setEmail(employeeToUpdate.email)
+            setKey(employeeToUpdate.key)
         }
     }, [])
 
@@ -103,7 +103,7 @@ export default OperatorRegister
 
 export async function getServerSideProps(ctx) {
     const cookies = nookies.get(ctx)
-    nookies.destroy(ctx, 'barberToUpdate')
+    nookies.destroy(ctx, 'employeeToUpdate')
 
     return { props: { cookies } }
 }

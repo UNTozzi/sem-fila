@@ -16,13 +16,13 @@ interface FuncionarioDTO {
     email?: string,
     nome: string,
     senha?: string,
-    nomeBarbearia?: string,
+    nomeEstabelecimento?: string,
     funcionario?: Boolean,
     key: string;
 }
 
-interface BarbeariaDTO {
-    nomeBarbearia: string;
+interface EstabelecimentoDTO {
+    nomeEstabelecimento: string;
     endereco: string;
     key: string
 }
@@ -34,11 +34,11 @@ interface AppointmentDTO {
     funcionario: FuncionarioDTO,
     key: string;
     status: string;
-    barbearia: object;
+    estabelecimento: object;
 }
 
 export default function Appointment ({ cookies }) {
-    const [barbearia, setBarbearia] = useState<BarbeariaDTO>({key: '', endereco: '', nomeBarbearia: ''});
+    const [estabelecimento, setEstabelecimento] = useState<EstabelecimentoDTO>({key: '', endereco: '', nomeEstabelecimento: ''});
     const [funcionario, setFuncionario] = useState<FuncionarioDTO>({key: '', nome: ''});
     const [cliente, setCliente] = useState<ClienteDTO>({key: '', nome: ''});
     const [funcionarios, setFuncionarios] = useState<FuncionarioDTO[]>([]);
@@ -50,10 +50,10 @@ export default function Appointment ({ cookies }) {
     const [key, setkey] = useState('');
 
     useEffect(() => {
-        if(!cookies.contentBarbearia) window.location.href = '../'
+        if(!cookies.contentEstabelecimento) window.location.href = '../'
         else {
-            let barbeariaCookie: BarbeariaDTO = JSON.parse(cookies.contentBarbearia)
-            setBarbearia({key: barbeariaCookie.key, endereco: barbeariaCookie.endereco, nomeBarbearia: barbeariaCookie.nomeBarbearia})
+            let estabelecimentoCookie: EstabelecimentoDTO = JSON.parse(cookies.contentEstabelecimento)
+            setEstabelecimento({key: estabelecimentoCookie.key, endereco: estabelecimentoCookie.endereco, nomeEstabelecimento: estabelecimentoCookie.nomeEstabelecimento})
         }
         let reference = firebase.ref('usuario/')
         reference.on('value', (snapshot) => {
@@ -65,15 +65,15 @@ export default function Appointment ({ cookies }) {
             setClientes(clientToShow)
         })
 
-        reference = firebase.ref('barbeiro/')
+        reference = firebase.ref('funcionario/')
         reference.on('value', (snapshot) => {
-            let barberToShow = []
+            let employeeToShow = []
             let values: FuncionarioDTO = snapshot.val()
-            let barbeariaCookie = JSON.parse(cookies.contentBarbearia)
+            let estabelecimentoCookie = JSON.parse(cookies.contentEstabelecimento)
             for (let prop in values) {
-                if (values[prop].barbearia.key === barbeariaCookie.key) barberToShow.push(values[prop])
+                if (values[prop].estabelecimento.key === estabelecimentoCookie.key) employeeToShow.push(values[prop])
             }
-            setFuncionarios(barberToShow)
+            setFuncionarios(employeeToShow)
         })
 
         let cookie = cookies.appointmentToUpdate
@@ -94,12 +94,12 @@ export default function Appointment ({ cookies }) {
         if (!key) {
             let firebaseKey = firebase.ref().child('agendamento').push().key
             console.log(funcionario)
-            firebase.ref('agendamento/' + firebaseKey).set({ barbearia, funcionario, cliente , key: firebaseKey, dataAgendamento, horarioInicio, horarioFim, status }).then((response: Response) => {
+            firebase.ref('agendamento/' + firebaseKey).set({ estabelecimento, funcionario, cliente , key: firebaseKey, dataAgendamento, horarioInicio, horarioFim, status }).then((response: Response) => {
                 window.location.href = '../home'
             })
         }
         else {
-            firebase.ref('agendamento/' + key).set({ barbearia, funcionario, cliente , key, dataAgendamento, horarioInicio, horarioFim, status }).then((response: Response) => {
+            firebase.ref('agendamento/' + key).set({ estabelecimento, funcionario, cliente , key, dataAgendamento, horarioInicio, horarioFim, status }).then((response: Response) => {
                 window.location.href = '../home'
             })
         }
@@ -127,7 +127,7 @@ export default function Appointment ({ cookies }) {
                     <FormField label="Funcionário">
                         <Select
                             options={funcionarios}
-                            emptySearchMessage="Nenhum barbeiro cadastrado"
+                            emptySearchMessage="Nenhum funcionario cadastrado"
                             labelKey="nome"
                             valueKey="key"
                             value={funcionario}

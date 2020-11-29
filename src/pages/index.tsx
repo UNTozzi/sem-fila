@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Head from 'next/head'
 
 export default function Home() {
@@ -9,10 +10,7 @@ export default function Home() {
       </Head>
 
       <main className="main">
-        <h1 className="title">
-          SEM<a>FILA</a>
-        </h1>
-
+          <Image src="/semfila7.png" layout="intrinsic" width="500%" height="100%" />
         <p className="description">
           Precisamos que você esteja logado
         </p>

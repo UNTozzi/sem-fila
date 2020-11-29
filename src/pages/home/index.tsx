@@ -16,12 +16,12 @@ function Appointment ({ cookies }) {
     }, [])
 
     const handleLogout = useCallback(() => {
-        destroyCookie(null, 'contentBarbearia')
+        destroyCookie(null, 'contentEstabelecimento')
         window.location.href = '../'
     }, [])
     
     const handleGoToBarber = useCallback(() => {
-        window.location.href = '../barber'
+        window.location.href = '../employee'
     }, [])
 
     const handleUpdate = useCallback((appointment) => {
@@ -34,14 +34,14 @@ function Appointment ({ cookies }) {
     }, [])
 
     useEffect(() => {
-        if(!cookies.contentBarbearia) window.location.href = '../'
+        if(!cookies.contentEstabelecimento) window.location.href = '../'
         let reference = firebase.ref('agendamento/')
         reference.on('value', (snapshot) => {
             let appointmentToShow = []
             let values = snapshot.val()
-            let barbeariaCookie = JSON.parse(cookies.contentBarbearia)
+            let estabelecimentoCookie = JSON.parse(cookies.contentEstabelecimento)
             for (let prop in values) {
-                if (values[prop].barbearia.key === barbeariaCookie.key) appointmentToShow.push(values[prop])
+                if (values[prop].estabelecimento.key === estabelecimentoCookie.key) appointmentToShow.push(values[prop])
             }
             setAppointments(appointmentToShow)
         })
@@ -54,7 +54,7 @@ function Appointment ({ cookies }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header background="brand" width="100%" margin="none">
-                <Button icon={<User />} hoverIndicator label="Barbeiros" onClick={handleGoToBarber} style={{border: '0'}}/>
+                <Button icon={<User />} hoverIndicator label="Funcionários" onClick={handleGoToBarber} style={{border: '0'}}/>
                 <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
             </Header>
             <Box className="main" pad="0" height="90vh" justify="start" margin={{top: '3vh'}}>
@@ -86,7 +86,7 @@ function Appointment ({ cookies }) {
                                 property: 'endereco',
                                 header: 'Endereço',
                                 align: 'center',
-                                render: datum => datum.barbearia.endereco || <Text color="#7D4CDB">Sem registro</Text>
+                                render: datum => datum.estabelecimento.endereco || <Text color="#7D4CDB">Sem registro</Text>
                             },
                             {
                                 property: 'dataAgendamento',
