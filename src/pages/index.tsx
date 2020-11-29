@@ -1,39 +1,38 @@
 import Image from 'next/image'
 import Head from 'next/head'
+import { Box, Header, Heading } from 'grommet'
+import { Login, UserAdd } from 'grommet-icons'
+
+import { BoxIndex, Card } from '../../styles/pages'
 
 export default function Home() {
+  function handleGoToLogin () {
+    window.location.href= './login'
+  }
+
+  function handleGoToRegister () {
+    window.location.href= './register'
+  }
+
   return (
-    <div className="container">
+    <Box width="100vw" height="100vh">
       <Head>
         <title>SemFila</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/sf_icon_zoom.png" />
       </Head>
-
-      <main className="main">
-          <Image src="/semfila7.png" layout="intrinsic" width="500%" height="100%" />
-        <p className="description">
-          Precisamos que você esteja logado
-        </p>
-
-        <div className="grid">
-          <a href="/login" className="card">
-            <h3>Logar &rarr;</h3>
-            <p>Já ta acostumado com o tempo livre né?</p>
-          </a>
-          <a href="/register" className="card">
-            <h3>Registrar &rarr;</h3>
-            <p>Ta cansado de perder tempo né? Chega ae!</p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="footer">
-        <a
-          rel="noopener noreferrer"
-        >
-          Powered by Fawkes
-        </a>
-      </footer>
-    </div>
+      <Header background="#202024" width="100%" height="12vh" margin="none" justify="center">
+        <Image src="/semfila7.png" layout="intrinsic" width="150%" height="50%"/>      
+      </Header>
+      <BoxIndex  direction="row" fill>
+          <Card onClick={handleGoToLogin}>
+            <Login size="xlarge"/>
+            <Heading level="4" color="gray">Já ta acostumado com o tempo livre né?</Heading>
+          </Card>
+          <Card onClick={handleGoToRegister}>
+            <UserAdd size="xlarge"/>
+            <Heading level="4" color="gray">Ta querendo ganhar tempo? Cadastre-se</Heading>
+          </Card>
+      </BoxIndex>
+    </Box>
   )
 }
