@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { FormEvent, useCallback, useState } from 'react';
 import nookies, { setCookie } from 'nookies'
 
+import { BoxLogin } from '../../../styles/pages/login/login'
 import firebase from '../../../lib/firebase'
 import Image from 'next/image';
 
@@ -37,8 +38,8 @@ function Login() {
                 <title>Login | SemFila</title>
                 <link rel="icon" href="/sf_icon_zoom.png" />
             </Head>
-            <Box direction="row" justify="evenly" align="center" fill pad="4rem">
-                <Box height="50vh" width="30vw">
+            <BoxLogin direction="row" justify="evenly" align="center" fill pad="4rem" className="container-login">
+                <Box height="50vh" width="30vw" gridArea="text">
                     <Image src="/semfila7.png" layout="responsive" width="50%" height="20%" />
                     <Heading level="1" style={{fontWeight: "bold"}}>Faça seu login na plataforma</Heading>
                 </Box>
@@ -48,6 +49,7 @@ function Login() {
                 background="#202024" 
                 style={{borderRadius: '5px'}}
                 responsive
+                gridArea="login"
                 >
                     <Box alignSelf="start"><Button icon={<FormPreviousLink />} hoverIndicator onClick={handleGoToIndex}/></Box>
                     <Box height="90%" direction="column" justify="evenly" pad={{horizontal: '3rem', bottom: '1rem'}}>
@@ -73,7 +75,7 @@ function Login() {
                         <Text alignSelf="center">Não tem uma conta? faça o <Anchor href="../register" color="#7D4CDB" style={{textDecoration: 'none'}}>cadastro</Anchor></Text>
                     </Box>
                 </Box>
-            </Box>
+            </BoxLogin>
         </Box>
         )
     }

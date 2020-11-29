@@ -1,10 +1,10 @@
 import { Anchor, Box, Button, Heading, Text, TextInput } from 'grommet'
-import { FormPreviousLink, LocationPin, Lock, Mail, Map, Organization } from 'grommet-icons';
+import { FormPreviousLink, Lock, Mail, Map, Organization } from 'grommet-icons';
 import Head from 'next/head'
 import { useCallback, useState } from 'react';
 import Image from 'next/image'
 
-
+import { BoxRegister } from '../../../styles/pages/register/register'
 import firebase from '../../../lib/firebase'
 
 function Register() {
@@ -31,13 +31,14 @@ function Register() {
                 <title>Registro | SemFila</title>
                 <link rel="icon" href="/sf_icon_zoom.png" />
             </Head>
-            <Box direction="row" justify="evenly" align="center" fill pad="4rem">
+            <BoxRegister direction="row" justify="evenly" align="center" fill pad="4rem" className="container-register">
                 <Box
                     height="70vh" 
                     width="30vw"
                     background="#202024" 
                     style={{borderRadius: '5px'}}
                     responsive
+                    gridArea="register"
                 >
                     <Box alignSelf="start"><Button icon={<FormPreviousLink />} hoverIndicator onClick={handleGoToIndex}/></Box>
                     <Box height="90%" direction="column" justify="evenly" pad={{horizontal: '3rem', bottom: '1rem'}}>
@@ -82,12 +83,12 @@ function Register() {
                         <Text alignSelf="center">Já tem uma conta? faça o <Anchor href="../login" color="#7D4CDB" style={{textDecoration: 'none'}}>login</Anchor></Text>
                     </Box>
                 </Box>
-                <Box height="50vh" width="30vw">
+                <Box height="50vh" width="30vw" gridArea="text">
                     <Image src="/semfila7.png" layout="responsive" width="50%" height="100%" />
                     <Heading level="3">Ta cansado de ter o filas de cliente cobrando para serem atendidos?</Heading>
                     <Heading level="5" color="grey">Junte-se a nós e começe a ganhar tempo com agendamentos prévios!</Heading>
                 </Box>
-            </Box>
+            </BoxRegister>
         </Box>
     )
     
