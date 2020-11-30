@@ -3,10 +3,10 @@ import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
 import nookies, { destroyCookie, setCookie } from 'nookies'
 
-
+import { BoxHome, Card } from '../../../styles/pages/home/home'
 import firebase from '../../../lib/firebase'
 
-import { Close, Logout, Update, User } from 'grommet-icons'
+import { Add, Close, Logout, Update, User } from 'grommet-icons'
 
 function Appointment ({ cookies }) {
     const [appointments, setAppointments] = useState([]);
@@ -48,18 +48,18 @@ function Appointment ({ cookies }) {
     }, [])
 
     return (
-        <div className="container" style={{maxWidth: '100vw'}}>
+        <div>
             <Head>
-                <title>SemFila</title>
-                <link rel="icon" href="/favicon.ico" />
+                <title>Home | SemFila</title>
+                <link rel="icon" href="./sf_icon_zoom.png" />
             </Head>
-            <Header background="brand" width="100%" margin="none">
+            <Header background="#202024" width="100vw" margin="none">
                 <Button icon={<User />} hoverIndicator label="Funcionários" onClick={handleGoToBarber} style={{border: '0'}}/>
                 <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
             </Header>
-            <Box className="main" pad="0" height="90vh" justify="start" margin={{top: '3vh'}}>
-                <Button alignSelf="end" style={{color: "white"}} onClick={handleGoToAppointment} label="Agendar novo horário"/>
-                <Box className="grid" direction="column" style={{maxWidth: '100vw', overflowX: 'auto'}}>
+            <BoxHome height="90vh" margin={{top: '3vh'}} direction="column">
+                <Box style={{alignItems: 'flex-end'}} alignSelf="center" width="90vw"><Button className="button-primary" onClick={handleGoToAppointment} label="Novo Agendamento"/></Box>
+                <Card>
                     <DataTable
                         style={{ overflowX: 'scroll' }}
                         primaryKey={false}
@@ -123,11 +123,8 @@ function Appointment ({ cookies }) {
                         ]}
                         data={appointments}
                     />
-                </Box>
-            </Box>
-            <footer className="footer">
-                <a rel="noopener noreferrer">Powered by Fawkes</a>
-            </footer>
+                </Card>
+            </BoxHome>
         </div>
     )
     
