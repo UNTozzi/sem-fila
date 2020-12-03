@@ -1,5 +1,5 @@
 import { Box, Button, Form,  FormField, Header,  Select, TextInput } from 'grommet'
-import { FormPreviousLink, Logout } from 'grommet-icons';
+import { Calendar, Clock, Close, FormPreviousLink, Logout } from 'grommet-icons';
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
 import nookies, { destroyCookie } from 'nookies'
@@ -115,27 +115,31 @@ export default function Appointment ({ cookies }) {
                 <title>SemFila</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Header background="brand" width="100%" margin="none">
-                <Button icon={<FormPreviousLink/>} hoverIndicator onClick={handleGoToHome}/>
-            </Header>
-            <Box className="main" pad="0">
-                <Form
-                    onSubmit={handleSchedule}
-                    style={{maxWidth: '80vw', width: '80vw', margin: 0}}
-                    messages={{required: 'Obrigatório'}}
-                >
-                    <FormField label="Funcionário">
+            <Box
+                width="30vw"
+                background="#202024" 
+                style={{borderRadius: '5px'}}
+                responsive
+                gridArea="register"
+            >
+                <Box alignSelf="start"><Button icon={<FormPreviousLink />} hoverIndicator onClick={handleGoToHome}/></Box>
+                <Box height="90%" direction="column" justify="evenly" pad={{horizontal: '3rem', bottom: '1rem'}}>
+                    Funcionário
+                    <Box margin={{vertical: '1vh'}}>
                         <Select
+                            placeholder="Funcionário"
                             options={funcionarios}
-                            emptySearchMessage="Nenhum funcionario cadastrado"
+                            emptySearchMessage="Nenhum funcionário cadastrado"
                             labelKey="nome"
                             valueKey="key"
                             value={funcionario}
                             onChange={({option}) => setFuncionario(option)}
                         />
-                    </FormField>
-                    <FormField label="Cliente">
+                    </Box>
+                    Cliente
+                    <Box margin={{vertical: '1vh'}}>
                         <Select
+                            placeholder="Cliente"
                             options={clientes}
                             emptySearchMessage="Nenhum cliente cadastrado"
                             labelKey="nome"
@@ -143,31 +147,52 @@ export default function Appointment ({ cookies }) {
                             value={cliente}
                             onChange={({ option }) => setCliente(option)}
                         />
-                    </FormField>
-                    <FormField label="Data do agendamento" >
-                        <TextInput type="date" value={dataAgendamento} onChange={value => setDataAgendamento(value.target.value)}/>
-                    </FormField>
-                    <FormField label="Começa" >
-                        <TextInput type="time" value={horarioInicio} onChange={value => setHorarioInicio(value.target.value)}/>
-                    </FormField>
-                    <FormField label="Termina" >
-                        <TextInput type="time" value={horarioFim} onChange={value => setHorarioFim(value.target.value)}/>
-                    </FormField>
-                    <FormField label="Status" >
-                        <Select
-                            options={cliente.nome ? [, 'Marcado', 'Cancelado'] : ['Livre']}
-                            value={status}
-                            onChange={({ option }) => setStatus(option)}
-                        />
-                    </FormField>
-                    <Box direction="row" justify="evenly">
-                        <Button type="submit" primary label="Agendar" margin={{top: '3vh'}}/>
                     </Box>
-                </Form>
+                    Data do Agendamento
+                    <Box margin={{vertical: '1vh'}}>
+                        <TextInput
+                            required
+                            placeholder="Data do Agendamento"
+                            type="date" plain="full"
+                            value={dataAgendamento}
+                            onChange={val => setDataAgendamento(val.target.value)}
+                            className="input-default"
+                            icon={<Calendar  size="medium" color="gray"/>}
+                        />
+                    </Box>
+                    Começa
+                    <Box margin={{vertical: '1vh'}}>
+                        <TextInput 
+                            required
+                            placeholder="Começa"
+                            type="time" plain="full"
+                            value={horarioInicio}
+                            onChange={val => setHorarioInicio(val.target.value)}
+                            className="input-default"
+                            icon={<Clock  size="medium" color="gray"/>}
+                        />
+                    </Box>
+                    Termina
+                    <Box margin={{vertical: '1vh'}}>
+                        <TextInput 
+                            required
+                            placeholder="Termina"
+                            type="time" plain="full"
+                            value={horarioFim}
+                            onChange={val => setHorarioFim(val.target.value)}
+                            className="input-default"
+                            icon={<Clock  size="medium" color="gray"/>}
+                        />
+                    </Box>
+                    Status
+                    <Select
+                        options={cliente.nome ? ['Marcado', 'Cancelado'] : ['Livre']}
+                        value={status}
+                        onChange={({ option }) => setStatus(option)}
+                    />
+                    <Button type="submit" className="button-primary" label="Agendar" onClick={handleSchedule} style={{marginTop: '3vh'}}/>
+                </Box>
             </Box>
-            <footer className="footer" style={{maxHeight: '10vh', marginTop: '3vh'}}>
-                <a rel="noopener noreferrer">Powered by Fawkes</a>
-            </footer>
         </div>
     )
 }
