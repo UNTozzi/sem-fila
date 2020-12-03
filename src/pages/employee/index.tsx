@@ -3,10 +3,11 @@ import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
 import nookies, { destroyCookie } from 'nookies'
 
-
+import { Card, BoxEmployee } from '../../../styles/pages/employee/employee'
 import firebase from '../../../lib/firebase'
 
 import { Close, FormPreviousLink, Logout, Update, UserAdd } from 'grommet-icons'
+import Image from 'next/image';
 
 function Barber ({cookies}) {
     const [employees, setBarbers] = useState([]);
@@ -48,20 +49,22 @@ function Barber ({cookies}) {
     }, [])
 
     return (
-        <div className="container">
+        <div>
             <Head>
                 <title>SemFila</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Header background="brand" width="100%" margin="none">
-                <Button icon={<FormPreviousLink />} hoverIndicator onClick={handleGoToHome}/>
+            <Header background="#202024" width="100vw" margin="none">
+                <Box direction="row" align="center">
+                    <Button icon={<FormPreviousLink />} hoverIndicator onClick={handleGoToHome}/>
+                    <Image src="/semfila7.png" layout="intrinsic" width="100%" height="30%"/>
+                </Box>
                 <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
             </Header>
-            <Box className="main" pad="0" height="90vh" justify="start" margin={{top: '3vh'}}>
-                <Button icon={<UserAdd color="white" />} alignSelf="end" style={{color: "white"}} onClick={handleGoToDetail} label="Novo Funcionario"/>
-                <Box className="grid" direction="column">
+            <BoxEmployee height="90vh" margin={{top: '3vh'}} direction="column">
+                <Box style={{alignItems: 'flex-end'}} alignSelf="center" width="90vw"><Button label="Novo Funcionário" className="button-primary" onClick={handleGoToDetail}/></Box>
+                <Card>
                     <DataTable
-                        style={{width: '70vw'}}
                         primaryKey={false}
                         border={{
                             header: {
@@ -93,11 +96,8 @@ function Barber ({cookies}) {
                         ]}
                         data={employees}
                     />
-                </Box>
-            </Box>
-            <footer className="footer">
-                <a rel="noopener noreferrer">Powered by Fawkes</a>
-            </footer>
+                </Card>
+            </BoxEmployee>
         </div>
     )
     

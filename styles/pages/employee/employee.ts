@@ -22,7 +22,7 @@ export const Card = styled(Box)`
 
 `
 
-export const BoxHome = styled(Box)`
+export const BoxEmployee = styled(Box)`
     align-items: center;
     height: max-content;
 

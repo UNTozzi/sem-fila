@@ -7,6 +7,7 @@ import { BoxHome, Card } from '../../../styles/pages/home/home'
 import firebase from '../../../lib/firebase'
 
 import { Add, Close, Logout, Update, User } from 'grommet-icons'
+import Image from 'next/image';
 
 function Appointment ({ cookies }) {
     const [appointments, setAppointments] = useState([]);
@@ -54,8 +55,13 @@ function Appointment ({ cookies }) {
                 <link rel="icon" href="./sf_icon_zoom.png" />
             </Head>
             <Header background="#202024" width="100vw" margin="none">
-                <Button icon={<User />} hoverIndicator label="Funcionários" onClick={handleGoToBarber} style={{border: '0'}}/>
-                <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
+                <Box margin={{left: '1vw'}}>
+                    <Image src="/semfila7.png" layout="intrinsic" width="100%" height="30%" style={{marginLeft: '3vw'}}/>
+                </Box>
+                <Box direction="row" justify="evenly">
+                    <Button icon={<User />} hoverIndicator onClick={handleGoToBarber} style={{border: '0', justifySelf: 'start'}}/>
+                    <Button icon={<Logout />} hoverIndicator onClick={handleLogout}/>
+                </Box>
             </Header>
             <BoxHome height="90vh" margin={{top: '3vh'}} direction="column">
                 <Box style={{alignItems: 'flex-end'}} alignSelf="center" width="90vw"><Button className="button-primary" onClick={handleGoToAppointment} label="Novo Agendamento"/></Box>

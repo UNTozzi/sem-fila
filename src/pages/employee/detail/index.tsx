@@ -1,13 +1,13 @@
 import { Box, Button, Form, FormField, Header, TextInput } from 'grommet'
-import { FormPreviousLink } from 'grommet-icons';
+import { FormPreviousLink, Mail, User } from 'grommet-icons';
 import { NextApiResponse } from 'next';
 import Head from 'next/head'
 import { useCallback, useEffect, useState } from 'react';
 import nookies, { destroyCookie } from 'nookies'
 
-
-
+import { BoxDetail } from '../../../../styles/pages/employee/detail/detail'
 import firebase from '../../../../lib/firebase'
+import Image from 'next/image';
 
 interface FuncionarioDTO {
     email: string,
@@ -63,37 +63,43 @@ function OperatorRegister({cookies}) {
     return (
         <div className="container">
             <Head>
-                <title>SemFila</title>
-                <link rel="icon" href="/favicon.ico" />
+                <title>Funcionário | SemFila</title>
+                <link rel="icon" href="/sf_icon_zoom.png" />
             </Head>
-            <Header background="brand" width="100%" margin="none">
-                <Button icon={<FormPreviousLink />} hoverIndicator onClick={handleReturn}/>
-            </Header>
-            <Box className="main" height="90vh" pad="0">
-                <h1 className="title">SEM<a>FILA</a></h1>
-                <Box className="grid" margin="0">
-                    <Form
-                        onReset={() => (setEmail(''), setNome(''))}
-                        onSubmit={handleSubmit}
-                        className="card"
-                    >
-                        <FormField label="Nome">
-                            <TextInput required type="text" value={nome} onChange={val => setNome(val.target.value)}/>
-                        </FormField>
-                        <FormField label="Email">
-                            <TextInput  required type="email" value={email} onChange={val => setEmail(val.target.value)}/>
-                        </FormField>
-                        <Box direction="row" justify="evenly">
-                            <Button type="submit" primary label="Salvar"/>
-                            <Button type="reset" label="Limpar"/>
-                        </Box>
-                    </Form>
+            <BoxDetail direction="row" justify="evenly" align="center" fill pad="4rem" className="container-register">
+                <Box
+                    height="70vh" 
+                    width="30vw"
+                    background="#202024" 
+                    style={{borderRadius: '5px'}}
+                    responsive
+                    gridArea="register"
+                >
+                    <Box alignSelf="start"><Button icon={<FormPreviousLink />} hoverIndicator onClick={handleReturn}/></Box>
+                    <Box height="90%" direction="column" justify="evenly" pad={{horizontal: '3rem', bottom: '1rem'}}>
+                        <Image src="/semfila7.png" layout="responsive" width="30%" height="10%" />
+                        <TextInput 
+                            required
+                            placeholder="Nome"
+                            type="text" plain="full"
+                            value={nome}
+                            onChange={val => setNome(val.target.value)}
+                            className="input-default"
+                            icon={<User  size="medium" color="gray"/>}
+                        />
+                        <TextInput 
+                            required
+                            placeholder="E-mail"
+                            type="email" plain="full"
+                            value={email}
+                            onChange={val => setEmail(val.target.value)}
+                            className="input-default"
+                            icon={<Mail size="medium" color="gray"/>}
+                        />
+                        <Button type="submit" className="button-primary" label="Salvar" onClick={handleSubmit}/>
+                    </Box>
                 </Box>
-            </Box>
-        
-            <footer className="footer">
-                <a rel="noopener noreferrer">Powered by Fawkes</a>
-            </footer>
+            </BoxDetail>
         </div>
     )
     
